@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Zoom Meeting - Automation with Alim</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 560px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .zoom-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 28px;
+        }
+
+        .header-text h1 {
+            font-size: 24px;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .header-text p {
+            font-size: 14px;
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .description {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            padding: 14px 45px 14px 15px;
+            border: 2px solid #e5e5e5;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus {
+            outline: none;
+            border-color: #667eea;
+            background: #ffffff;
+        }
+
+        input[type="text"]::placeholder,
+        input[type="email"]::placeholder {
+            color: #999;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 18px;
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .privacy-notice {
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+
+        .footer {
+            text-align: center;
+            color: #bbb;
+            font-size: 13px;
+            margin-top: 20px;
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 14px;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .zoom-link {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 2px solid #667eea;
+        }
+
+        .zoom-link-label {
+            font-size: 12px;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .zoom-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            word-break: break-all;
+            font-size: 14px;
+        }
+
+        .zoom-link a:hover {
+            text-decoration: underline;
+        }
+
+        .join-button {
+            margin-top: 15px;
+            background: #2D8CFF;
+            padding: 14px;
+        }
+
+        .join-button:hover {
+            background: #1a7ae8;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            .header-text h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="zoom-icon">📹</div>
+            <div class="header-text">
+                <h1>Join Zoom Meeting</h1>
+                <p>Automation with Alim</p>
+            </div>
+        </div>
+
+        <p class="description">
+            Enter your full name & email to validate and get meeting access
+        </p>
+
+        <form id="zoomForm">
+            <div class="form-group">
+                <label for="fullname">Full name</label>
+                <div class="input-wrapper">
+                    <input 
+                        type="text" 
+                        id="fullname" 
+                        name="fullname" 
+                        placeholder="Enter your full name" 
+                        required
+                    >
+                    <span class="input-icon">👤</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <div class="input-wrapper">
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="Enter your email address" 
+                        required
+                    >
+                    <span class="input-icon">✉️</span>
+                </div>
+            </div>
+
+            <button type="submit" id="submitBtn">
+                Validate & Join Meeting
+            </button>
+        </form>
+
+        <div class="privacy-notice">
+            We respect your privacy. Your info is used only to validate meeting access.
+        </div>
+
+        <div id="message" class="message"></div>
+
+        <div class="footer">
+            Developed by Alim | Automation with Alim
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('zoomForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const messageDiv = document.getElementById('message');
+        const fullnameInput = document.getElementById('fullname');
+        const emailInput = document.getElementById('email');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Get form values
+            const fullname = fullnameInput.value.trim();
+            const email = emailInput.value.trim();
+            
+            // Validate inputs
+            if (!fullname || !email) {
+                showMessage('Please fill in all fields', 'error');
+                return;
+            }
+
+            // Disable button and show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner"></span>Validating...';
+            messageDiv.classList.remove('show');
+
+            try {
+                // Send data to webhook
+                const response = await fetch('https://alim.automationlearners.pro/webhook-test/35c337bb-3e9a-46bf-bc24-5a7d3b374606', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        fullname: fullname,
+                        email: email,
+                        timestamp: new Date().toISOString(),
+                        source: 'Zoom Meeting Registration'
+                    })
+                });
+
+                const responseData = await response.json().catch(() => ({}));
+
+                if (response.ok) {
+                    // Check if webhook returned a Zoom link
+                    if (responseData.zoom_link || responseData.meeting_link || responseData.link) {
+                        const zoomLink = responseData.zoom_link || responseData.meeting_link || responseData.link;
+                        showZoomLink(zoomLink, fullname);
+                    } else {
+                        showMessage('✓ Registration successful! Meeting link will be sent to your email.', 'success');
+                        form.reset();
+                    }
+                } else {
+                    throw new Error(responseData.message || 'Server responded with an error');
+                }
+            } catch (error) {
+                showMessage('✗ Failed to validate. Please try again or contact support.', 'error');
+                console.error('Error:', error);
+            } finally {
+                // Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Validate & Join Meeting';
+            }
+        });
+
+        function showMessage(text, type) {
+            messageDiv.innerHTML = text;
+            messageDiv.className = `message ${type} show`;
+        }
+
+        function showZoomLink(link, name) {
+            const zoomLinkHTML = `
+                <div class="zoom-link">
+                    <div class="zoom-link-label">🎉 Welcome ${escapeHtml(name)}! Your Meeting Link:</div>
+                    <a href="${escapeHtml(link)}" target="_blank" id="zoomLinkUrl">${escapeHtml(link)}</a>
+                </div>
+                <button type="button" class="join-button" onclick="window.open('${escapeHtml(link)}', '_blank')">
+                    🚀 Join Zoom Meeting Now
+                </button>
+            `;
+            
+            messageDiv.innerHTML = zoomLinkHTML;
+            messageDiv.className = 'message success show';
+            form.reset();
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
