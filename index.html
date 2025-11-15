@@ -86,7 +86,7 @@
             font-weight: 600;
         }
 
-        /* Dynamic Stats Dashboard */
+        /* Assertive Stats Dashboard (Static) */
         .stats-dashboard {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -118,18 +118,6 @@
             color: #667eea;
             display: block;
             margin-bottom: 4px;
-            animation: countUp 1s ease-out;
-        }
-
-        @keyframes countUp {
-            from {
-                opacity: 0;
-                transform: scale(0.5);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
         }
 
         .stat-label {
@@ -439,7 +427,7 @@
         <div class="form-content">
             <div class="header">
                 <div class="zoom-icon">
-                    <img src="https://www.genspark.ai/api/files/s/Qw0bfo2Ka" alt="Zoom Icon">
+                    <img src="https://www.genspark.ai/api/files/s/hqTXByxMa" alt="Zoom Icon">
                 </div>
                 <div class="header-text">
                     <h1>Join Zoom Meeting</h1>
@@ -452,18 +440,18 @@
                 <span class="live-text">Meeting is Live</span>
             </div>
 
-            <!-- Dynamic Stats Dashboard -->
+            <!-- Assertive Stats Dashboard (Static Values) -->
             <div class="stats-dashboard">
                 <div class="stat-card">
-                    <span class="stat-value" id="totalParticipants">0</span>
+                    <span class="stat-value">247</span>
                     <span class="stat-label">Participants</span>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-value" id="todayJoined">0</span>
+                    <span class="stat-value">38</span>
                     <span class="stat-label">Today</span>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-value" id="avgDuration">0</span>
+                    <span class="stat-value">42</span>
                     <span class="stat-label">Avg Time (min)</span>
                 </div>
             </div>
@@ -539,46 +527,6 @@
         const emailInput = document.getElementById('email');
         const progressBar = document.getElementById('progressBar');
 
-        // Dynamic Stats
-        const stats = {
-            totalParticipants: document.getElementById('totalParticipants'),
-            todayJoined: document.getElementById('todayJoined'),
-            avgDuration: document.getElementById('avgDuration')
-        };
-
-        // Initialize and animate stats
-        function animateStats() {
-            const targets = {
-                totalParticipants: Math.floor(Math.random() * 150) + 50,
-                todayJoined: Math.floor(Math.random() * 30) + 10,
-                avgDuration: Math.floor(Math.random() * 45) + 15
-            };
-
-            Object.keys(targets).forEach(key => {
-                animateValue(stats[key], 0, targets[key], 1500);
-            });
-        }
-
-        function animateValue(element, start, end, duration) {
-            const range = end - start;
-            const increment = range / (duration / 16);
-            let current = start;
-
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= end) {
-                    element.textContent = end;
-                    clearInterval(timer);
-                } else {
-                    element.textContent = Math.floor(current);
-                }
-            }, 16);
-        }
-
-        // Update stats every 30 seconds
-        animateStats();
-        setInterval(animateStats, 30000);
-
         // Form input progress
         function updateProgress() {
             const nameValue = nameInput.value.trim();
@@ -628,12 +576,6 @@
                 });
 
                 if (response.ok) {
-                    // Update stats
-                    const currentTotal = parseInt(stats.totalParticipants.textContent);
-                    const currentToday = parseInt(stats.todayJoined.textContent);
-                    animateValue(stats.totalParticipants, currentTotal, currentTotal + 1, 500);
-                    animateValue(stats.todayJoined, currentToday, currentToday + 1, 500);
-
                     // Show success message with meeting link
                     messageDiv.innerHTML = `
                         ✓ Validation successful! Access granted.<br>
@@ -673,15 +615,6 @@
                 }, 5000);
             }
         }
-
-        // Auto-update meeting status
-        setInterval(() => {
-            const liveIndicator = document.querySelector('.live-indicator');
-            liveIndicator.style.animation = 'none';
-            setTimeout(() => {
-                liveIndicator.style.animation = '';
-            }, 10);
-        }, 60000);
     </script>
 </body>
 </html>
