@@ -56,21 +56,21 @@
         .zoom-icon {
             width: 80px;
             height: 80px;
-            background: white;
+            background: linear-gradient(135deg, #2D8CFF, #0B5CFF);
             border-radius: 16px;
             display: flex;
             justify-content: center;
             align-items: center;
             margin-right: 16px;
             flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            padding: 8px;
+            box-shadow: 0 4px 12px rgba(45, 140, 255, 0.3);
+            padding: 16px;
         }
 
-        .zoom-icon img {
+        .zoom-icon svg {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            fill: white;
         }
 
         .header-text h1 {
@@ -86,7 +86,7 @@
             font-weight: 600;
         }
 
-        /* Assertive Stats Dashboard (Static) */
+        /* Static Stats Dashboard */
         .stats-dashboard {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -427,7 +427,10 @@
         <div class="form-content">
             <div class="header">
                 <div class="zoom-icon">
-                    <img src="https://www.genspark.ai/api/files/s/CqhJ597Vt" alt="Zoom Icon">
+                    <!-- Zoom Video Camera Icon SVG -->
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/>
+                    </svg>
                 </div>
                 <div class="header-text">
                     <h1>Join Zoom Meeting</h1>
@@ -440,7 +443,7 @@
                 <span class="live-text">Meeting is Live</span>
             </div>
 
-            <!-- Assertive Stats Dashboard (Static Values) -->
+            <!-- Static Stats Dashboard (No Counting) -->
             <div class="stats-dashboard">
                 <div class="stat-card">
                     <span class="stat-value">247</span>
@@ -586,11 +589,6 @@
                     messageDiv.className = 'message success show';
                     form.reset();
                     progressBar.style.width = '0%';
-                    
-                    // Optionally redirect after 2 seconds
-                    // setTimeout(() => {
-                    //     window.location.href = 'https://meet.google.com/cnb-uuvi-mew';
-                    // }, 2000);
                 } else {
                     throw new Error('Server responded with an error');
                 }
